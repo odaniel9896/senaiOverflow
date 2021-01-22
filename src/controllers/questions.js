@@ -12,45 +12,46 @@ module.exports = {
 
     async store(req, res) {
         const { title, description, image, gist, categories } = req.body;
-
-        const {studentId} = req;    
-
-        const categoriesArray = categories.split(",")
-
-
+     
+        const { studentId } = req;
+     
+        const categoriesArr = categories.split(",");
+     
         try {
-            //buscar o aluno pelo ID
-            let student = await Student.findByPk(studentId);
-
-            //se student não existir, retorna erro
-            if (!student)
-                return res.status(404).send({ error: "Aluno não encontrado" });
-
-            //crio a pergunta para o student
-            let question = await student.createQuestion({ title, description, image : req.file.filename, gist });
-
-    
-            // adicionar uma lista de categorias para  a question
-            await question.addCategories(categoriesArray)
-            
-            //retorno sucesso
-            res.status(201).send({
-                id : question.id,
-                title: question.title,
-                description: question.description,
-                created_at: question.created_at,
-                gist : question.gist,
-                image : `http://localhost:3333/${req.file.path}`,
-            });
-            
-
+          // BUSCA O ALUNO PELO ID
+     
+          let student = await Student.findByPk(studentId);
+     
+          // SE O ALUNO NÃO EXISTIR RETORNA ERRO
+     
+          if (!student)
+            return res.status(404).send({ error: "Aluno não encontrado" });
+     
+          // CRIO A PERGUNTA PARA O ALUNO
+          let question = await student.createQuestion({
+            title,
+            description,
+            image: req.file.filename,
+            gist,
+          });
+     
+          await question.addCategories(categoriesArr);
+     
+          // RETORNO DE SUCESSO
+     
+          res.status(201).send({
+            id: question.id,
+            title: question.title,
+            description: question.description,
+            createdAt: question.created_at,
+            gist: question.gist,
+            image: req.file.firebaseUrl,
+          });
         } catch (error) {
-            console.log(error);
-            res.status(500).send(error);
+          console.log(error);
+          res.status(500).send(error);
         }
-
-
-    },
+      },
 
     find(req, res) {
 

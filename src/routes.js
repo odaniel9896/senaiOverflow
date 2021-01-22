@@ -2,8 +2,9 @@
 const express = require("express");
 const BodyParser = require('body-parser');
 const { celebrate, Joi,  Segments } = require("celebrate");
+const Multer = require("multer")
 
-
+const multer = Multer()
 
 const authMiddleware = require("./middleware/authorization")
 const uploadQuestions = require("./middleware/uploadQuestions")
@@ -36,7 +37,7 @@ routes.post("/students", studentValidator.create, studentController.store);
 
 
 //usa o authorization
-//routes.use(authMiddleware)
+routes.use(authMiddleware)
 routes.use(BodyParser.json());
 
 
@@ -53,7 +54,7 @@ routes.get("/feed", feedControler.index);
 //routes.get("/questions/:id", questionControllezr.find);
 
 
-routes.post("/questions", uploadQuestions, postValidator.create, questionController.store);
+routes.post("/questions", multer.single("image"), uploadQuestions, postValidator.create, questionController.store);
 routes.delete("/questions/:id", questionController.delete);
 routes.put("/questions/:id", questionController.update);
 

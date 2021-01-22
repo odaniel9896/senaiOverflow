@@ -1,32 +1,48 @@
-const Multer = require("multer")
+const Multer = require("multer");
 
-const uploadQuestions = Multer({
-    //STORAGE SERA O LOCAL DE ARMAZENAMENTO DO STORAGE 
-    storage: Multer.diskStorage({
-        //DESTINATION FICARA GUARDADA AS IMAGENS 
-        destination: "uploads/",
-        filename: (req, file, callback) => {
-            //POP SEMPRE PEGA A ULTIMA POSITION DE UM VETOR
-            const filename = Date.now() + "." + file.originalname.split(".").pop();
+const admin = require("firebase-admin");
 
-            return callback(null, filename)
+var account = require("../config/firebasekey.json")
+
+const BUCKET = "gs://senaioverflow.appspot.com"
+
+admin.initializeApp({
+credential: admin.credential.cert(account),
+storageBucket: BUCKET})
+
+const bucket = admin.storage().bucket();
+
+const uploadQuestions = (req,res,next) => {
+    if (!req.file)
+        return next();
+
+    const image = req.file;
+
+    const filename = Date.now() + "." + image.originalname.split(".").pop();
+
+    const file = bucket.file(filename)
+
+    const stream = file.createWriteStream ({
+        metadata: {
+            contentType: image.mimetype,
         }
-    }),
-    fileFilter: (req, file, callback) => {
-        //TIPOS DE IMAGENS PERMITIDOS
-        let allowedTypes = ["image/png", "image/jpg"];
+    });
 
-        //verifica o type da imagem recebido
-        if(allowedTypes.includes(file.mimetype)) {
-            callback(null, true)
-        }
-        else {
-            callback(new Error("Tipo de arquivo invalido "))
-        }
-    },
-    limits : {
-        fileSize: 1024 * 1024 * 5
-    }
-});
+    stream.on("error", (e) => {
+        console.log(e)
+    })
 
-module.exports = uploadQuestions.single("image");
+    stream.on("finish", async() => {
+        await file.makePublic();
+        req.file.firebaseUrl = `https://storage.googleapis.com/${BUCKET}/${filename}`;
+
+        next();
+    });
+
+    stream.end(image.buffer)
+
+}
+
+
+
+module.exports = uploadQuestions;
