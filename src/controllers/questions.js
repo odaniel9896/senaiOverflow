@@ -2,6 +2,9 @@ const Question = require("../models/Question");
 const Student = require("../models/Student");
 const Category = require("../models/Category")
 
+
+
+//require("fs") biblioteca para excluir arquivos
 module.exports = {
     async index(req, res) {
         
@@ -12,6 +15,7 @@ module.exports = {
 
         const {studentId} = req;    
 
+        const categoriesArray = categories.split(",")
 
 
         try {
@@ -23,14 +27,22 @@ module.exports = {
                 return res.status(404).send({ error: "Aluno não encontrado" });
 
             //crio a pergunta para o student
-            let question = await student.createQuestion({ title, description, image, gist });
+            let question = await student.createQuestion({ title, description, image : req.file.filename, gist });
 
     
             // adicionar uma lista de categorias para  a question
-            await question.addCategories(categories)
-
+            await question.addCategories(categoriesArray)
+            
             //retorno sucesso
-            res.status(201).send(question);
+            res.status(201).send({
+                id : question.id,
+                title: question.title,
+                description: question.description,
+                created_at: question.created_at,
+                gist : question.gist,
+                image : `http://localhost:3333/${req.file.path}`,
+            });
+            
 
         } catch (error) {
             console.log(error);

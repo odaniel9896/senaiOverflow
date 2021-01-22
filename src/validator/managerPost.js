@@ -7,7 +7,7 @@ module.exports = {
         title: Joi.string().max(255).min(5).required(),
         description : Joi.string().max(255).min(10).required(),
         gist : Joi.string().max(255).min(20),
-        categories: Joi.array().min(1).max(100),
+        categories: Joi.string().min(1).max(100),
     }),
   }),
 };
