@@ -7,7 +7,7 @@ const Multer = require("multer")
 const multer = Multer()
 
 const authMiddleware = require("./middleware/authorization")
-const uploadQuestions = require("./middleware/uploadQuestions")
+const uploadQuestions = require("./services/uploadQuestions")
 
 
 const studentController = require("./controllers/students");

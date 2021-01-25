@@ -1,7 +1,8 @@
 const Student = require("../models/Student");
 const bcrpy = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const auth = require("../config/auth.json")
+const auth = require("../config/auth.json");
+const { generateToken } = require("../utils");
 module.exports = {
     //função que vai ser executada pela rota
     async index(req, res) {
@@ -59,7 +60,10 @@ module.exports = {
             // cria os dados do estudante, com a senha ja cripto
             student = await Student.create({ ra, name, email, password:passwordCript});
             // cria o token
-            const token = jwt.sign({studentId: student.id, studentName: student.name}, auth.secret)
+            const token = generateToken({
+                studentId: student.id,
+                 studentName: student.name
+            })
 
             //retornar resposta de sucesso
             res.status(201).send({

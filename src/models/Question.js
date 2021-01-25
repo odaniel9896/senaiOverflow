@@ -24,7 +24,7 @@ class Question extends Model
     {
         this.belongsTo(models.Student);
         this.hasMany(models.Answer)
-        this.belongsToMany(models.Category, {through: "question_categories"});
+        this.belongsToMany(models.Category, {through: "question_category"});
     }
 }
  

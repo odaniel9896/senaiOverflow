@@ -31,7 +31,7 @@ module.exports = {
           let question = await student.createQuestion({
             title,
             description,
-            image: req.file.filename,
+            image: req.file.firebaseUrl,
             gist,
           });
      
