@@ -1,7 +1,9 @@
 //importa o express
 const express = require("express");
 
-const {errors} = require("celebrate")
+const {errors} = require("celebrate");
+
+const cors = require("cors")
 
 //importa as rotas
 const routes = require("./routes");
@@ -12,6 +14,8 @@ require("./database");
 const app = express();
 
 app.use(express.json());
+
+app.use(cors())
 
 app.use("/uploads", express.static("uploads"))
 
