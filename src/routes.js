@@ -20,6 +20,7 @@ const sessionController = require("./controllers/sessions");
 const studentValidator = require("./validator/manager");
 const postValidator = require("./validator/managerPost");
 const answerValidator = require("./validator/managerAnswer");
+const categoriesControler = require("./controllers/categories")
 
 
 
@@ -31,6 +32,7 @@ const routes = express.Router();
 //criar session
 routes.post("/sessions", sessionController.store);
 routes.get("/students", studentController.index);
+routes.get("/categories", categoriesControler.index);
 
 //criar aluno
 routes.post("/students", studentValidator.create, studentController.store);
