@@ -15,6 +15,7 @@ const questionController = require("./controllers/questions");
 const answerController = require("./controllers/answers");
 const feedControler = require("./controllers/feed");
 const sessionController = require("./controllers/sessions");
+const studentImageController = require("./controllers/studentImage");
 
 //VALIDACAO
 const studentValidator = require("./validator/manager");
@@ -38,6 +39,7 @@ routes.get("/categories", categoriesControler.index);
 routes.post("/students", studentValidator.create, studentController.store);
 
 
+
 //usa o authorization
 routes.use(authMiddleware)
 routes.use(BodyParser.json());
@@ -47,14 +49,13 @@ routes.use(BodyParser.json());
 //rotas de students
 
 routes.get("/students/:id", studentController.find);
-
+routes.post("/students/:id/images", multer.single("image"), uploadQuestions, studentImageController.store);
 routes.delete("/students/:id", studentController.delete);
 routes.put("/students/:id", studentController.update);
 
 //rota do feed
 routes.get("/feed", feedControler.index);
 //routes.get("/questions/:id", questionControllezr.find);
-
 
 routes.post("/questions", multer.single("image"), uploadQuestions, postValidator.create, questionController.store);
 routes.delete("/questions/:id", questionController.delete);

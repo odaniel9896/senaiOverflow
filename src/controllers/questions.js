@@ -31,7 +31,7 @@ module.exports = {
           let question = await student.createQuestion({
             title,
             description,
-            image: req.file.firebaseUrl,
+            image: req.file ? req.file.firebaseUrl : null,
             gist,
           });
      
@@ -45,7 +45,7 @@ module.exports = {
             description: question.description,
             createdAt: question.created_at,
             gist: question.gist,
-            image: req.file.firebaseUrl,
+            image: req.file ? req.file.firebaseUrl : null,
           });
         } catch (error) {
           console.log(error);
