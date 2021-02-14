@@ -21,7 +21,9 @@ const studentImageController = require("./controllers/studentImage");
 const studentValidator = require("./validator/manager");
 const postValidator = require("./validator/managerPost");
 const answerValidator = require("./validator/managerAnswer");
-const categoriesControler = require("./controllers/categories")
+const categoriesControler = require("./controllers/categories");
+const searchController = require("./controllers/search")
+
 
 
 
@@ -55,6 +57,9 @@ routes.put("/students/:id", studentController.update);
 
 //rota do feed
 routes.get("/feed", feedControler.index);
+
+routes.post("/search", searchController.store);
+
 //routes.get("/questions/:id", questionControllezr.find);
 
 routes.post("/questions", multer.single("image"), uploadQuestions, postValidator.create, questionController.store);

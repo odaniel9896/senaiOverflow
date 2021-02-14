@@ -1,5 +1,8 @@
 const { index } = require("./questions");
 const Question = require("../models/Question");
+const getShip = require("sequelize")
+
+
 
 
 module.exports = {
@@ -23,7 +26,6 @@ module.exports = {
                     {
                         association: "Categories",
                         attributes: ["id", "description"],
-                        unique: true,
                         through: {attributes: []}
                     },
                     
@@ -33,9 +35,14 @@ module.exports = {
                 subQuery: false
             });
 
-            //const hisShip = await feed.getShip()
+            const options = {
+                methodName: 'paginate',
+                primaryKey: 'id'
+            }
+           
 
-            res.send(hisShip)
+            //const hisShip = await feed.getShip() 
+            res.send(feed)
         } catch (error) {
             console.log(error)
             res.status(500).send(error);

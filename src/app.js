@@ -7,6 +7,7 @@ const cors = require("cors")
 
 //importa as rotas
 const routes = require("./routes");
+const Question = require("./models/Question");
 
 require("./database");
 
@@ -21,4 +22,18 @@ app.use("/uploads", express.static("uploads"))
 
 app.use(routes);
 app.use(errors())
+
+
+
 module.exports = app;
+
+// for (let assoc of Object.keys(Question.associations)) {
+//     for (let accessor of Object.keys(Question.associations[assoc].accessors)) {
+//       console.log(
+//         Question.name +
+//           "." +
+//           Question.associations[assoc].accessors[accessor] +
+//           "()"
+//       );
+//     }
+//   }
