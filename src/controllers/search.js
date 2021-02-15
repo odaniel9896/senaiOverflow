@@ -5,8 +5,7 @@ const Op = Sequelize.Op
 module.exports = {
     async store (req,res) {
 
-        const {search} = req.body;
-        const {stundentId} = req;        
+        const {search} = req.body;     
         try {
                 const student = await Question.findAll({
                     where:
@@ -17,14 +16,37 @@ module.exports = {
                                         [Op.substring]: search
                                     }
                                 },            
-                                {
+                                { 
                                     description: {
                                         [Op.substring]: search
                                     }  
                                 }
                             ,                 
                             ]
-                        }  
+                        },
+                attributes: ["id", "title", "description", "image", "gist", "created_at"],
+                include: [
+                    {
+                        association: "Student",
+                        attributes: ["id", "name", "image"]
+                    },
+                    {
+                        association: "Answers",
+                        attributes: ["id", "description", "created_at"],
+                        include : {
+                            association: "Student",
+                            attributes: ["id", "name", "image"]
+                        }
+                    },
+                    {
+                        association: "Categories",
+                        attributes: ["id", "description"],
+                        through: {attributes: []}
+                    },
+                    
+                    ],
+                order: [["created_at", "DESC"]],                
+                subQuery: false  
                 });
 
         if(student.length === 0)

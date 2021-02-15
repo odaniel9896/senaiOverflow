@@ -7,8 +7,11 @@ const getShip = require("sequelize")
 
 module.exports = {
     async index(req,res) {
+            const limitId = 5
+            const page = 1
         try {
-            const feed = await Question.findAll({
+            const feed = await Question.findAndCountAll({
+                //offset: page, limit: limitId,
                 attributes: ["id", "title", "description", "image", "gist", "created_at"],
                 include: [
                     {
@@ -30,17 +33,11 @@ module.exports = {
                     },
                     
                     ],
-                order: [["created_at", "DESC"]],
-                offset: 5, limit: 5,
+                order: [["created_at", "DESC"]],                
                 subQuery: false
             });
 
-            const options = {
-                methodName: 'paginate',
-                primaryKey: 'id'
-            }
-           
-
+   
             //const hisShip = await feed.getShip() 
             res.send(feed)
         } catch (error) {
