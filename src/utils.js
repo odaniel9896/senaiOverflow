@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 const generateToken = (payload) => {
     return jwt.sign(payload, auth.secret,
     {
-        expiresIn: "1h",    
+        expiresIn: "24h",    
     }
     );
 }

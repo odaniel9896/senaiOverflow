@@ -7,19 +7,20 @@ const getShip = require("sequelize")
 
 module.exports = {
     async index(req,res) {
-            const limitId = 5
-            const page = 1
         try {
-            const feed = await Question.findAndCountAll({
-                //offset: page, limit: limitId,
+            const feed = await Question.findAll({
+               
                 attributes: ["id", "title", "description", "image", "gist", "created_at"],
+                //group: ['Question.id'],
                 include: [
                     {
                         association: "Student",
-                        attributes: ["id", "name", "image"]
+                        attributes: ["id", "name", "image"],
+                      
                     },
                     {
                         association: "Answers",
+                        separate:true,
                         attributes: ["id", "description", "created_at"],
                         include : {
                             association: "Student",
@@ -31,10 +32,10 @@ module.exports = {
                         attributes: ["id", "description"],
                         through: {attributes: []}
                     },
-                    
+                    //[Sequelize.fn('GROUP_CONCAT', Sequelize.col('categories.description')), 'description']]
                     ],
-                order: [["created_at", "DESC"]],                
-                subQuery: false
+                order: [["created_at", "DESC"]],
+                subQuery: false                 
             });
 
    
