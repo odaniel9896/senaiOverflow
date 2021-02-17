@@ -57,9 +57,8 @@ routes.put("/students/:id", studentController.update);
 
 //rota do feed
 routes.get("/feed", feedControler.index);
-routes.get("/feed/:limit/:page", feedControler.index);
 
-routes.post("/search", searchController.store);
+routes.get("/search", searchController.find);
 
 //routes.get("/questions/:id", questionControllezr.find);
 

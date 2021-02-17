@@ -3,9 +3,8 @@ const Question = require("../models/Question");
 const Op = Sequelize.Op
 
 module.exports = {
-    async store (req,res) {
-
-        const {search} = req.body;     
+    async find(req,res) {    
+        const keyWord = req.query.keyWord   
         try {
                 const student = await Question.findAll({
                     where:
@@ -13,12 +12,12 @@ module.exports = {
                             [Op.or] : [ 
                                 {
                                     title : {
-                                        [Op.substring]: search
+                                        [Op.substring]: keyWord
                                     }
                                 },            
                                 { 
                                     description: {
-                                        [Op.substring]: search
+                                        [Op.substring]: keyWord
                                     }  
                                 }
                             ,                 

@@ -7,11 +7,13 @@ const getShip = require("sequelize")
 
 module.exports = {
     async index(req,res) {
+        const idPage = req.query.idPage
+            const page = (idPage -1) * 5
+
         try {
             const feed = await Question.findAll({
-               
-                attributes: ["id", "title", "description", "image", "gist", "created_at"],
-                //group: ['Question.id'],
+                
+                attributes: ["id", "title", "description", "image", "gist", "created_at", "StudentId"],
                 include: [
                     {
                         association: "Student",
@@ -20,7 +22,6 @@ module.exports = {
                     },
                     {
                         association: "Answers",
-                        separate:true,
                         attributes: ["id", "description", "created_at"],
                         include : {
                             association: "Student",
@@ -32,10 +33,10 @@ module.exports = {
                         attributes: ["id", "description"],
                         through: {attributes: []}
                     },
-                    //[Sequelize.fn('GROUP_CONCAT', Sequelize.col('categories.description')), 'description']]
                     ],
                 order: [["created_at", "DESC"]],
-                subQuery: false                 
+                limit: 5,
+                offset: page                         
             });
 
    
