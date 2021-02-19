@@ -2,34 +2,31 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.createTable("questions", {
+    queryInterface.createTable("answers", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
-        autoIncrement: true
-      },
-      title: {
-        type: Sequelize.STRING,
-        allowNull: false,
+        autoIncrement: true,
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
+        allowNull: false
+      },
+      question_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-      },
-      image: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      gist: {
-        type: Sequelize.STRING,
-        allowNull: true,
+        references: {
+          model: "questions",
+          key: "id"
+        },
       },
       student_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: "students",
           key: "id"
-        }
+        },
       },
       created_at: {
         type: Sequelize.DATE,
@@ -39,11 +36,10 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       }
-
-    });
+    })
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.dropTable("questions");
+    queryInterface.dropTable("answers");
   }
 };

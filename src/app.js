@@ -1,13 +1,11 @@
 //importa o express
 const express = require("express");
+const { errors } = require("celebrate");
 
-const {errors} = require("celebrate");
-
-const cors = require("cors")
+const cors = require("cors");
 
 //importa as rotas
 const routes = require("./routes");
-const Question = require("./models/Question");
 
 require("./database");
 
@@ -16,24 +14,13 @@ const app = express();
 
 app.use(express.json());
 
-app.use(cors())
+app.use(cors());
 
-app.use("/uploads", express.static("uploads"))
+//definimos a pasta uploads como pública, servindo arquivos estáticos
+app.use("/uploads", express.static("uploads"));
 
 app.use(routes);
-app.use(errors())
 
-
+app.use(errors());
 
 module.exports = app;
-
-// for (let assoc of Object.keys(Question.associations)) {
-//     for (let accessor of Object.keys(Question.associations[assoc].accessors)) {
-//       console.log(
-//         Question.name +
-//           "." +
-//           Question.associations[assoc].accessors[accessor] +
-//           "()"
-//       );
-//     }
-//   }

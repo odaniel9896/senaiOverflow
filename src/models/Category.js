@@ -1,27 +1,27 @@
-const {Model, DataTypes} = require("sequelize");
- 
-class Category extends Model
-{
-    // AQUI INICIALIZAMOS NOSSOS CAMPOS DA TABELA
-    static init(sequelize)
-    {
-        super.init
-        (
+const { Model, DataTypes } = require("sequelize");
+
+class Category extends Model {
+    /**
+     * aqui configuramos os campos da tabela
+     * os campos automáticos não precisam ser declarados
+     */
+    static init(sequelize) {
+        super.init(
             {
-                description: DataTypes.STRING,
-               
+                description: DataTypes.STRING
             },
- 
             {
-                
                 sequelize,
             }
         )
     }
-    // AQUI CONFIGURAMOS OS RELACIONAMENTOS
-    static associate(models){
-        this.belongsToMany(models.Question, {through: "question_categories"})
+
+    /**
+     * aqui configuramos os relacionamentos 
+     */
+    static associate(models) {
+        this.belongsToMany(models.Question, { through: "question_category" });
     }
 }
- 
+
 module.exports = Category;

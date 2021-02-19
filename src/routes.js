@@ -1,73 +1,66 @@
-//IMPORT DE BIBLIOTECAS
 const express = require("express");
-const BodyParser = require('body-parser');
-const { celebrate, Joi,  Segments } = require("celebrate");
-const Multer = require("multer")
 
-const multer = Multer()
-
-const authMiddleware = require("./middleware/authorization")
-const uploadQuestions = require("./services/uploadQuestions")
-
+const authMiddleware = require("./middleware/authorization");
+const uploadSingleImage = require("./middleware/uploadSingleImage");
 
 const studentController = require("./controllers/students");
+const studentImagesController = require("./controllers/studentImages");
 const questionController = require("./controllers/questions");
 const answerController = require("./controllers/answers");
-const feedControler = require("./controllers/feed");
+const feedController = require("./controllers/feed");
 const sessionController = require("./controllers/sessions");
-const studentImageController = require("./controllers/studentImage");
+const categoriesController = require("./controllers/categories");
 
-//VALIDACAO
-const studentValidator = require("./validator/manager");
-const postValidator = require("./validator/managerPost");
-const answerValidator = require("./validator/managerAnswer");
-const categoriesControler = require("./controllers/categories");
-const searchController = require("./controllers/search")
-
-
-
-
+const studentValidators = require("./validators/students");
+const questionValidators = require("./validators/questions");
+const answerValidators = require("./validators/answers");
+const uploadFirebase = require("./services/uploadFirebase");
 
 const routes = express.Router();
 
-//ROTAS PUBLICAS
-
-//criar session
+//rotas públicas
 routes.post("/sessions", sessionController.store);
+routes.post("/students", studentValidators.create, studentController.store);
+
+routes.use(authMiddleware);
+
+//rotas privadas
+
+//rotas de alunos
 routes.get("/students", studentController.index);
-routes.get("/categories", categoriesControler.index);
-
-//criar aluno
-routes.post("/students", studentValidator.create, studentController.store);
-
-
-
-//usa o authorization
-routes.use(authMiddleware)
-routes.use(BodyParser.json());
-
-
-
-//rotas de students
-
 routes.get("/students/:id", studentController.find);
-routes.post("/students/:id/images", multer.single("image"), uploadQuestions, studentImageController.store);
 routes.delete("/students/:id", studentController.delete);
 routes.put("/students/:id", studentController.update);
+routes.post(
+  "/students/:id/images",
+  uploadSingleImage,
+  uploadFirebase,
+  studentImagesController.store
+);
 
-//rota do feed
-routes.get("/feed", feedControler.index);
-
-routes.get("/search", searchController.find);
-
-//routes.get("/questions/:id", questionControllezr.find);
-
-routes.post("/questions", multer.single("image"), uploadQuestions, postValidator.create, questionController.store);
+//rotas de perguntas
+routes.get("/questions", questionValidators.index, questionController.index);
+routes.post(
+  "/questions",
+  uploadSingleImage,
+  uploadFirebase,
+  questionValidators.create,
+  questionController.store
+);
 routes.delete("/questions/:id", questionController.delete);
 routes.put("/questions/:id", questionController.update);
 
-routes.post("/questions/:id/answer", answerValidator.create, answerController.store);
+//rotas de respostas
+routes.post(
+  "/questions/:id/answers",
+  answerValidators.create,
+  answerController.store
+);
+
+//rotas do feed
+routes.get("/feed", feedController.index);
+
+//rotas de categorias
+routes.get("/categories", categoriesController.index);
 
 module.exports = routes;
-
-

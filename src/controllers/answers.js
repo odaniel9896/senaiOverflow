@@ -1,40 +1,51 @@
 const Question = require("../models/Question");
 const Student = require("../models/Student");
-const Answer = require("../models/Answer");
 
 module.exports = {
-    index(req, res){
+  index(req, res) {
 
-    },
-    async store(req, res){
-        const {description} = req.body;
-        const questionId = req.params.id;
-        const {studentId} = req;    
+  },
 
+  //função que adiciona uma respota a uma pergunta
+  async store(req, res) {
+    const questionId = req.params.id;
 
-        try {
-            let question = await Question.findByPk(questionId)
-               
-            if(!question)
-                return res.status(404).send({ error: "Pergunta não encontrada" });
-            // ADICIONA UMA RESMOSTA PARA ESSA DESCRICAO E ESSE ALUNO
-            const asnwer =   await question.createAnswer({description, student_id: studentId})
+    const { studentId } = req;
 
-            res.status(201).send(asnwer);
+    const { description } = req.body;
 
-        } catch (error) {
-            console.log(error);
-            res.status(500).send(error);
-        }
+    try {
 
-    },
-    find(req, res){
+      //verifica se a questão existe
+      const question = await Question.findByPk(questionId);
 
-    },
-    delete(req, res) {
+      //se não existir retorna erro 404
+      if (!question)
+        return res.status(404).send({ error: "Pergunta não encontrada" });
 
-    },
-    update(req, res) {
+      //cria a resposta para a pergunta com o aluno do token
+      const answer = await question.createAnswer({ description, student_id: studentId });
 
+      //responde com status de sucesso
+      res.status(201).send(answer);
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
     }
+
+  },
+
+  find(req, res) {
+
+  },
+
+  async update(req, res) {
+
+  },
+
+  async delete(req, res) {
+
+  }
+
 }
