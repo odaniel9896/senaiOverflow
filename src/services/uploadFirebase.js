@@ -1,10 +1,10 @@
 const { errors } = require("celebrate");
 const admin = require("firebase-admin");
 
-const serviceAccount = require("../config/firebasekey.json");
+const serviceAccount = require("../config/firebasekey");
 
 //alterar para o seu bucket
-const BUCKET = "senai-overflow-2021-01.appspot.com";
+const BUCKET = "senaioverflow.appspot.com";
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

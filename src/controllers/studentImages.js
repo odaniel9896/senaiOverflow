@@ -1,5 +1,5 @@
 const Student = require("../models/Student");
-const { store } = require("./sessions");
+
 
 module.exports = {
   async store(req, res) {

@@ -5,3 +5,5 @@
 /src/config/firebasekey.json
 
 /uploads
+
+.env

@@ -1,11 +1,11 @@
+require("dotenv").config()
 module.exports = {
-    host: "localhost",
-    username: "root",
-    password: "bcd127",
-    database: "dbsenaioverflow",
-    dialect: "mysql",
-    define: {
+    url: process.env.DATABASE_URL,
+    config : {
+        dialect: "mysql",
+        define: {
         timestamp: true,
         underscored: true
     }
+    } 
 }
