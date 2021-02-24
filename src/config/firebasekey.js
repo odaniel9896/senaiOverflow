@@ -1,7 +1,7 @@
-module.exports= {
+module.exports = {
   "type": "service_account",
   "project_id": process.env.FIREBASE_PROJECT_ID,
-  "private_key_id": "0319a0c73fecabf41afdef21cfb7e6a73ec2bd04",
+  "private_key_id": "b116a750a6dd63152231c9de904666b550fd240e",
   "private_key": process.env.FIREBASE_PROJECT_KEY.replace(/\\n/g, "\n"),
   "client_email": process.env.FIREBASE_PROJECT_EMAIL,
   "client_id": "100600572491766724992",
